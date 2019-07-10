@@ -4,6 +4,10 @@ require 'set'
 require 'sqlite3'
 
 
+##
+# Mapping to a normalized role name
+# for the authors, as the raw data contain
+# the authors in forms such as '川本英明訳'
 ROLES = {
   '編著' => 'editor',
   '監修' => 'director',
@@ -13,6 +17,9 @@ ROLES = {
   '絵' => 'illustrator',
 }
 
+##
+# Keys from the raw data which can be repeated more
+# than once for a single book
 REPEATED_KEYS = [:authorheading, :note]
 
 db = SQLite3::Database.new "opac.db"
@@ -34,6 +41,9 @@ rows = db.execute_batch <<-SQL
     published_location varchar(1024),
     publication_year integer,
     publication_month integer,
+    page_count integer,
+    height integer,
+    width integer,
     foreign key (holding_location_id) references holding_locations(id)
   );
 
@@ -183,6 +193,17 @@ def parse_pub(raw_pub)
   { location: location, publisher: publisher }.merge(date)
 end
 
+def parse_phys(raw_phys)
+  ##
+  # Parses a PHYS: line
+  # returns the result as
+  # { page_count: page_count, width: width, height: height }
+  raw_page_count, dimensions = raw_phys.split(" ; ")
+  page_count_match = /([0-9]+)p/.match(raw_page_count)
+  result = {}
+  result[:page_count] = page_count_match[1].to_i unless page.nil?
+end
+
 def parse_book(book)
   ##
   # Parses all the raw metadata of the book
@@ -191,6 +212,7 @@ def parse_book(book)
   # The resulting hash will contain the results of `parse_pub` and `parse_tr`
   book = book.merge(parse_tr(book))
   book = book.merge(parse_pub(book[:pub]))
+  book = book.merge(parse_bhys(book[:phys]))
   book
 end
 

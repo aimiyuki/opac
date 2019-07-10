@@ -1,29 +1,31 @@
-require 'sinatra'
+require 'sinatra/base'
 require 'sinatra/reloader'
+require 'sqlite3'
 
-require "sqlite3"
 
-db = SQLite3::Database.new "opac.db"
+class Opac < Sinatra::Base
+  configure :development do
+    register Sinatra::Reloader
+  end
 
-get '/' do 
+  def initialize
+    super
+    @db = SQLite3::Database.new "opac.db"
+  end
+
+  get '/' do
     query = "select title from books where 1"
     if ! params.fetch("keywords", "").empty?
-        query += " and title like '%#{params["keywords"]}%'" 
+      query += " and title like '%#{params["keywords"]}%'" 
     end
-    @books = db.execute query
+    @books = @db.execute query
     print query
-    erb:index
+    erb :index
   end
 
-get '/index.erb' do
-    erb:index
-end
-  
-get '/free_word.erb' do
-    erb:free_word
-end
-
-get '/stdopt/:id/?:usr?' do |id, usr|
-    "stdopt args ID:#{id} User:#{usr}"
+  get '/free-word' do
+    erb :free_word
   end
 
+  run! if app_file == $0
+end
