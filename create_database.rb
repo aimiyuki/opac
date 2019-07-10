@@ -198,10 +198,24 @@ def parse_phys(raw_phys)
   # Parses a PHYS: line
   # returns the result as
   # { page_count: page_count, width: width, height: height }
-  raw_page_count, dimensions = raw_phys.split(" ; ")
+  raw_page_count, raw_dimensions = raw_phys.split(" ; ")
   page_count_match = /([0-9]+)p/.match(raw_page_count)
   result = {}
-  result[:page_count] = page_count_match[1].to_i unless page.nil?
+  result[:page_count] = page_count_match[1].to_i unless page_count_match.nil?
+
+  # if no dimensions given, return
+  return result if raw_dimensions.nil?
+
+  # otherwise, parse dimensions
+  dimensions = raw_dimensions.split("×")
+  dimensions[-1].sub!("cm", "")
+  if dimensions.size == 1
+    result[:height] = dimensions[0].to_i
+  elsif dimensions.size == 2
+    result[:width] = dimensions[0].to_i
+    result[:height] = dimensions[1].to_i
+  end
+  result
 end
 
 def parse_book(book)
@@ -212,7 +226,7 @@ def parse_book(book)
   # The resulting hash will contain the results of `parse_pub` and `parse_tr`
   book = book.merge(parse_tr(book))
   book = book.merge(parse_pub(book[:pub]))
-  book = book.merge(parse_bhys(book[:phys]))
+  book = book.merge(parse_phys(book[:phys]))
   book
 end
 
@@ -299,13 +313,15 @@ def insert_book(db, book, authors_mapping)
   # It assumes that the authors are already present in the database
   # and that the authors_mapping contains a mapping from a (Ruby) hash of the author to the DB id of author
   columns = %w(holding_location_id holding_record isbn nbc title publisher
-               published_location publication_year publication_month)
+               published_location publication_year publication_month
+               page_count width height)
   columns_str = columns.join(", ") # "isbn, nbc, ...., publication_month"
   placeholders = Array.new(columns.size, "?").join(", ") # "?, ?, ..., ?" matching the numbers of columns
 
   db.execute "insert into books (#{columns_str}) values (#{placeholders})", [
     book[:location_id], book[:holdingsrecord], book[:isbn], book[:nbc],
-    book[:title], book[:publisher], book[:location], book[:year], book[:month]
+    book[:title], book[:publisher], book[:location], book[:year], book[:month],
+    book[:page_count], book[:width], book[:height]
   ]
   book_id = db.last_insert_row_id
 
