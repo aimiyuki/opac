@@ -1,50 +1,17 @@
-<!DOCTYPE html>
-<html lang="ja">
-<head>
-    <title>OPAC</title>
-    <meta charset="utf-8">  
-    <link rel="stylesheet" href="../static/style.css">
-</head>
+<h2>OPAC検索</h2>
 
-<body>
-    <header>
-        <nav>
-            <ul>
-                <li><a href="index.erb">簡易検索</a></li>
-                <li><a href="free_word.erb">フリーワード検索</a></li>
-            </ul>
-        </nav>
-    </header>
-
-    <div class="search">
-        <h1>検索するキーワードを入力してください</h1>
-        <h3>書名キーワード:</h3>
-        <form action="/" method="GET">
-                <input id="search-bar" name="keywords" type="text" placeholder="例:ハリーポッター">
-        <h3>著者名:</h3>
-                <input id="search-bar" name="author" type="text" placeholder="例: J.K.ローリング">
-        <h3>出版社:</h3>
-                <input id="search-bar" name="publisher" type="text" placeholder="例: 静山社">
-        <div class="buttons">
-               <input id="search-button" type="submit" value="検索">
-               <input id="clear-button" type="reset" value="クリア">
-        </div>
-        </form>
+<form action="<%= url('/') %>" method="GET">
+    <div class="form-group">
+        <label for="keyword">キワード (書籍名、著者、出版社)</label>
+        <input type="text" name="keyword" class="form-control" id="keyword"
+                placeholder="例: ハリーポッター&nbsp; J.K.ローリング&nbsp; 静山社"
+                value="<%= params[:keyword] %>">
     </div>
 
+    <div class="buttons text-center">
+        <a href="<%= url('/advanced-search') %>" class="btn btn-light mr-5">詳細検索へ</a>
+        <input id="search-button" class="btn btn-primary" type="submit" value="検索">
     </div>
-    <main>
-        <h2>検索結果一覧</h2>
-        <div id="results">
-        <ul>
-          <% @books.each do |book| %>
-            <li><%= book[0] %></li>
-          <% end %>
-        </ul> 
-        </div>
+</form>
 
-           
-    </main>
-    
-</body>
-</html>
+<%= erb :results %>

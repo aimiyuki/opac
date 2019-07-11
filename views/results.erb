@@ -1,0 +1,60 @@
+<main>
+    <h3>検索結果一覧 (<%= @hit_count %>件)</h3>
+    <div id="results">
+        <% @books.each do |book| %>
+            <div class="card mb-2">
+                <div class="card-body">
+                    <h5 class="card-title">
+                        <a href="<%= url("/books/#{book.id}") %>"><%= book.title %></a>
+                    </h5>
+                    <% book.book_authors.each do |book_author| %>
+                        <h6 class="card-subtitle mb-2 text-muted">
+                        <%= book_author.author.full_name %>
+                        <% if book_author.role != "author" %>
+                            <%= book_author.formatted_role %>
+                        <% end %>
+                    </h6>
+                    <% end %>
+                    <p class="card-text">
+                        <dl class="row">
+                            <% if book.publisher %>
+                                <dt class="col-2 text-right">出版社</dt>
+                                <dd class="col-10"><%= book.publisher %></dd>
+                            <% end %>
+
+                            <dt class="col-2 text-right">所蔵レコード</dt>
+                            <dd class="col-10"><%= book.holding_record %></dd>
+                        </dl>
+                    </p>
+                </div>
+            </div>
+        <% end %>
+    </div>
+
+    <% if @last_page > 1 %>
+        <nav class="container h-100">
+            <ul class="pagination row h-100 justify-content-center align-items-center">
+                <li class="page-item <%= 'disabled' if @page == 1 %>">
+                    <a class="page-link" href="<%= page_url(1) %>">&laquo;</a>
+                </li>
+                <li class="page-item <%= 'disabled' if @page == 1 %>">
+                    <a class="page-link" href="<%= page_url(@page - 1) %>">&#8592;</a>
+                </li>
+                <% [-2, -1, 0, 1, 2].each do |offset| %>
+                    <% page_number = @page + offset%>
+                    <% if page_number >= 1 && page_number <= @last_page %>
+                        <li class="page-item <%= 'disabled' if @page == page_number %>">
+                            <a class="page-link" href="<%= page_url(page_number) %>"><%= page_number %></a>
+                        </li>
+                    <% end %>
+                <% end %>
+                <li class="page-item <%= 'disabled' if @page == @last_page %>">
+                    <a class="page-link" href="<%= page_url(@page + 1) %>">&#8594;</a>
+                </li>
+                <li class="page-item <%= 'disabled' if @page == @last_page %>">
+                    <a class="page-link" href="<%= page_url(@last_page) %>">&raquo;</a>
+                </li>
+            </ul>
+        </nav>
+    <% end %>
+</main>

@@ -1,0 +1,45 @@
+<h2><%= @book.title %></h2>
+
+<dl>
+  <% if @book.book_authors.size > 0 %>
+    <dt>著者</dt>
+    <dd>
+      <% if @book.book_authors.size == 1 %>
+        <%= @book.book_authors[0].formatted %>
+      <% else %>
+        <ul>
+            <% @book.book_authors.each do |book_author| %>
+              <li><%= book_author.formatted %></li>
+            <% end %>
+        </ul>
+      <% end %>
+    </dd>
+  <% end %>
+  <% {
+      holding_location_name: "所在場所",
+      holding_record: "所蔵レコード",
+      nbc: "NBC",
+      isbn: "ISNB",
+      publisher: "出版社",
+      published_location: "出版地",
+      publication_date: "出版年月",
+      page_count: "ページ数",
+      size: "サイズ",
+  }.each do |key, translation| %>
+    <% value = @book.send(key) %>
+    <% if !value.nil? %>
+      <dt><%= translation %></dt>
+      <dd><%= value %></dd>
+    <% end %>
+  <% end %>
+  <% if @book.notes.size > 0 %>
+    <dt>備考</dt>
+    <dd>
+      <ul>
+        <% @book.notes.each do |note| %>
+          <li><%= note.content %></li>
+        <% end %>
+      </ul>
+    </dd>
+  <% end %>
+</dl>
