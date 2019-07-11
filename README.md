@@ -31,3 +31,21 @@ ruby opac.rb
 
 It can also be executed as a CGI application by using `cgi-bin/app.rb`
 as an entry point.
+
+## Screenshots
+
+### Index page
+
+![index](./screenshots/index.png)
+
+### Simple search
+
+![simple search](./screenshots/simple-search.png)
+
+### Advanced search
+
+![advanced search](./screenshots/advanced-search.png)
+
+### Book details
+
+![book details](./screenshots/details.png)
