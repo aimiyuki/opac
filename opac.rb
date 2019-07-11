@@ -1,7 +1,6 @@
 require 'sinatra/base'
 require 'sinatra/reloader'
 require 'sqlite3'
-require 'pry'
 
 require_relative 'models'
 
