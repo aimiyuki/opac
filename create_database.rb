@@ -149,9 +149,9 @@ end
 def parse_authors(raw_authors, book)
   ##
   # Parses a list of authors
-  # The authors are assumed to be separated by " ; " or "，"
+  # The authors are assumed to be separated by " ; ", "，", "、" or ","
   return [] if raw_authors.nil?
-  raw_authors.split(/ ; |，|,/).map { |raw_author| parse_author(raw_author, book) }
+  raw_authors.split(/ ; |，|,|、/).map { |raw_author| parse_author(raw_author, book) }
 end
 
 def parse_tr(book)
