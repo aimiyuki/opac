@@ -20,3 +20,14 @@ sqlite> select count(*) from books join book_authors on books.id = book_authors.
 sqlite> select count(*) from books join book_authors on books.id = book_authors.book_id join authors on book_authors.author_id = authors.id where authors.full_name like '%図書館%' and title like '%図書館%';
 1
 ```
+
+## Running the app
+
+The app can be run as a regular Sinatra application with
+
+```
+ruby opac.rb
+```
+
+It can also be executed as a CGI application by using `cgi-bin/app.rb`
+as an entry point.
