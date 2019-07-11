@@ -3,7 +3,7 @@
 
     <form action="<%= url('/advanced-search') %>" method="GET">
         <div class="form-group row">
-            <label for="title" class="col-sm-2 col-form-label text-right">書名</label>
+            <label for="title" class="col-sm-2 col-form-label text-lg-right">書名</label>
             <div class="col-sm-10">
                 <input id="title" name="title" type="text" class="form-control"
                         placeholder="例:ハリーポッター" value="<%= params[:title] %>">
@@ -11,7 +11,7 @@
         </div>
 
         <div class="form-group row">
-            <label for="author" class="col-sm-2 col-form-label text-right">著者名</label>
+            <label for="author" class="col-sm-2 col-form-label text-lg-right">著者名</label>
             <div class="col-sm-10">
                 <input id="author" name="author" type="text" class="form-control"
                 placeholder="例: J.K.ローリング" value="<%= params[:author] %>">
@@ -19,7 +19,7 @@
         </div>
 
         <div class="form-group row">
-            <label for="publisher" class="col-sm-2 col-form-label text-right">出版社</label>
+            <label for="publisher" class="col-sm-2 col-form-label text-lg-right">出版社</label>
             <div class="col-sm-10">
                 <input id="publisher" name="publisher" type="text" class="form-control"
                        placeholder="例: 静山社" value="<%= params[:publisher] %>">
@@ -27,7 +27,7 @@
         </div>
 
         <div class="form-group row">
-            <label for="isbn" class="col-sm-2 col-form-label text-right">ISBN</label>
+            <label for="isbn" class="col-sm-2 col-form-label text-lg-right">ISBN</label>
             <div class="col-sm-10">
                 <input id="isbn" name="isbn" type="text" class="form-control"
                        placeholder="例: ISBN4-577-80292-9" value="<%= params[:isbn] %>">
@@ -36,7 +36,7 @@
 
 
         <div class="form-group row">
-            <label for="year" class="col-sm-2 col-form-label text-right">出版年</label>
+            <label for="year" class="col-sm-2 col-form-label text-lg-right">出版年</label>
             <div class="col-sm-10">
                 <select id="year" name="year" class="custom-select">
                     <option <%= " selected" if params[:year].to_i == 0 %> value="">出版年</option>
