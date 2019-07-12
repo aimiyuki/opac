@@ -5,3 +5,5 @@ tmp/sockets/*
 !tmp/sockets/.keep
 tmp/pids/*
 !tmp/pids/.keep
+vendor/
+.bundle/
