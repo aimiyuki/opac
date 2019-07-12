@@ -11,8 +11,19 @@ ActiveRecord::Base.establish_connection(
   database: File.join(File.dirname(__FILE__), 'opac.db')
 )
 
+class FixPathInfo
+  def initialize(app)
+    @app = app
+  end
+
+  def call(env)
+    env["PATH_INFO"] = "/" if env["PATH_INFO"].nil?
+    @app.call env
+  end
+end
 
 class Opac < Sinatra::Base
+  use FixPathInfo # Rack::Static fails if PATH_INFO is nil
   use Rack::Static, urls: ['/public']
 
   set :per_page, 10
